@@ -57,3 +57,4 @@ def callback(ch, method, properties, body):
 channel.basic_consume(queue=RABBITMQ_QUEUE, on_message_callback=callback)
 print('Waiting for new stories...')
 channel.start_consuming()
+
