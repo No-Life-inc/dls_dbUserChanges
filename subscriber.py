@@ -34,11 +34,14 @@ channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
 channel.queue_bind(exchange=EXCHANGE_NAME, queue=RABBITMQ_USER_UPDATE_QUEUE)
 
 # Define the callback function
+# Define the callback function
 def new_user_callback(ch, method, properties, body):
     print("Received:", body)
 
-    # Prepare the user for insertion
-    user = json.loads(body)
+    # Prepare the story for insertion
+    data = json.loads(body)
+    user = data['user']
+    userInfo = data['userInfo']
     created_at = parser.parse(user['created_at'])
 
     insert_user = "INSERT INTO users(user_guid, created_at) OUTPUT INSERTED.user_id VALUES (?, ?)"
@@ -46,12 +49,13 @@ def new_user_callback(ch, method, properties, body):
     user_id = cursor.fetchone()[0]
 
     # Insert the message into MSSQL
+    # Note: Adjust the table name and column names according to your MSSQL database schema
     insert_user_info = "INSERT INTO user_info(first_name, last_name, email, created_at, user_id) VALUES (?,?,?,?,?)"
-    cursor.execute(insert_user_info, user['first_name'], user['last_name'], user['email'], created_at, user_id)
+    cursor.execute(insert_user_info, userInfo['FirstName'], userInfo['LastName'], userInfo['Email'], created_at, user_id)
 
     conn.commit()
 
-    print("User inserted into MSSQL")
+    print("Story inserted into MSSQL")
 
     # Acknowledge the message
     ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -70,7 +74,7 @@ def user_update_callback(ch, method, properties, body):
 
     # Insert the user info into MSSQL
     insert_user_info = "INSERT INTO user_info(first_name, last_name, email, created_at, user_id) VALUES (?,?,?,?,?)"
-    cursor.execute(insert_user_info, user['first_name'], user['last_name'], user['email'], created_at, user_id)
+    cursor.execute(insert_user_info, userInfo['FirstName'], userInfo['LastName'], userInfo['Email'], created_at, user_id)
 
     conn.commit()
 
