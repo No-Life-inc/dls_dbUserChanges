@@ -26,7 +26,7 @@ More Steps.<br>
 Lastly, use the following command:
 
 ```bash
-run PLACEHOLDER
+python subscriber.py
 ```
 
 ## Dependencies
