@@ -12,6 +12,7 @@ env_vars = load_dotenv(override=True)
 RABBITMQ_URL = f"amqp://{os.getenv('RABBITUSER')}:{os.getenv('RABBITPW')}@{os.getenv('RABBITURL')}/%2F"
 RABBITMQ_NEW_USER_QUEUE = 'UserQueue'
 RABBITMQ_USER_UPDATE_QUEUE = 'UserUpdateQueue'
+EXCHANGE_NAME = 'UserUpdateExchange'
 
 # MSSQL connection parameters
 MSSQL_CONN_STR = f"DRIVER={{FreeTDS}};SERVER={os.getenv('DB_SERVER')};DATABASE={os.getenv('DB_FRONTEND')};UID={os.getenv('DB_USER')};PWD={os.getenv('DB_PASSWORD')}"
@@ -26,6 +27,11 @@ channel = connection.channel()
 
 # Declare the queue
 channel.queue_declare(queue=RABBITMQ_NEW_USER_QUEUE, durable=True)
+channel.queue_declare(queue=RABBITMQ_USER_UPDATE_QUEUE, durable=True)
+
+# Declare the fanout exchange and bind the UserUpdateQueue to it
+channel.exchange_declare(exchange=EXCHANGE_NAME, exchange_type='fanout')
+channel.queue_bind(exchange=EXCHANGE_NAME, queue=RABBITMQ_USER_UPDATE_QUEUE)
 
 # Define the callback function
 def new_user_callback(ch, method, properties, body):
