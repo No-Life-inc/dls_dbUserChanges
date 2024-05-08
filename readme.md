@@ -9,26 +9,27 @@
 
 ## General Use
 
-What are the main use cases for the project? <br>
-How is the code located in the repository used? <br>
-- PLACEHOLDER: VALUE.
+This is the subscriber for changes about users that is in RabbitMQ queues.<br>
+It subscribes to queues regardning new or changed entities that need to be persisted in the write DB.<br>
 
 ## Environment Variables
 
 Create a .env in the root folder.
 
-- PLACEHOLDER=VALUE
+- RABBITUSER=user
+- RABBITPW=password
+- RABBITURL=localhost
+- DB_SERVER=localhost,1433
+- DB_FRONTEND=mssqlWrite
+- DB_USER=SA
+- DB_PASSWORD=YourStrongPassword123
 
 ## How To Run
 
 Make sure the environment variables are set.<br>
-More Steps.<br>
+
 Lastly, use the following command:
 
 ```bash
 python subscriber.py
 ```
-
-## Dependencies
-
-What dependencies are used and why.
