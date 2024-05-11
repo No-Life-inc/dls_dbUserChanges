@@ -38,7 +38,7 @@ channel.queue_bind(exchange=EXCHANGE_NAME, queue=RABBITMQ_USER_UPDATE_QUEUE)
 def new_user_callback(ch, method, properties, body):
     print("Received:", body)
 
-    # Prepare the story for insertion
+    # Prepare the user for insertion
     data = json.loads(body)
     user = data['user']
     userInfo = data['userInfo']
@@ -64,13 +64,15 @@ def user_update_callback(ch, method, properties, body):
     print("Received:", body)
 
     # Prepare the user for insertion
-    user = json.loads(body)
-    created_at = parser.parse(user['created_at'])
+    data = json.loads(body)
+    user = data['user']
+    userInfo = data['userInfo']
 
     # Get the user_id from the users table
     select_user = "SELECT user_id FROM users WHERE user_guid = ?"
     cursor.execute(select_user, user['guid'])
     user_id = cursor.fetchone()[0]
+    created_at = parser.parse(userInfo['created_at'])
 
     # Insert the user info into MSSQL
     insert_user_info = "INSERT INTO user_info(first_name, last_name, email, created_at, user_id) VALUES (?,?,?,?,?)"
@@ -79,6 +81,9 @@ def user_update_callback(ch, method, properties, body):
     conn.commit()
 
     print("User info updated in MSSQL")
+
+    # Acknowledge the message
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 # Start consuming messages
