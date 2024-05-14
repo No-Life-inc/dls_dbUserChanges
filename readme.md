@@ -20,7 +20,7 @@ Create a .env in the root folder.
 - RABBITPW=password
 - RABBITURL=localhost
 - DB_SERVER=localhost,1433
-- DB_FRONTEND=mssqlWrite
+- DB_FRONTEND=write-db
 - DB_USER=SA
 - DB_PASSWORD=YourStrongPassword123
 
