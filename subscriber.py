@@ -15,7 +15,7 @@ RABBITMQ_USER_UPDATE_QUEUE = 'UserUpdateQueue'
 EXCHANGE_NAME = 'UserUpdateExchange'
 
 # MSSQL connection parameters
-MSSQL_CONN_STR = f"DRIVER={{FreeTDS}};SERVER={os.getenv('DB_SERVER')};DATABASE={os.getenv('DB_FRONTEND')};UID={os.getenv('DB_USER')};PWD={os.getenv('DB_PASSWORD')}"
+MSSQL_CONN_STR = f"DRIVER={{FreeTDS}};SERVER={os.getenv('DB_SERVER')};DATABASE={os.getenv('WRITE_DB')};UID={os.getenv('DB_USER')};PWD={os.getenv('DB_PASSWORD')}"
 
 # Connect to MSSQL
 conn = pyodbc.connect(MSSQL_CONN_STR)
