@@ -16,13 +16,17 @@ It subscribes to queues regardning new or changed entities that need to be persi
 
 Create a .env in the root folder.
 
-- RABBITUSER=user
-- RABBITPW=password
-- RABBITURL=localhost
-- DB_SERVER=localhost,1433
-- WRITE_DB=writedb
-- DB_USER=SA
-- DB_PASSWORD=YourStrongPassword123
+RABBITUSER=user
+RABBITPW=password
+RABBITURL=localhost
+DB_SERVER=localhost,1433
+DB_FRONTEND=mssqlWrite
+DB_USER=SA
+DB_PASSWORD=YourStrongPassword123
+MONGOUSER=admin
+MONGOPW=Passw0rd!
+MONGOURL=@localhost:27017/admin
+MONGODB=frontend_backend_db
 
 ## How To Run
 
